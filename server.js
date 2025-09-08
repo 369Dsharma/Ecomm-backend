@@ -14,14 +14,34 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL,  
-    "http://localhost:3000",   
-    "http://localhost:5173"    
+    process.env.FRONTEND_URL,
+    "http://localhost:3000",
+    "http://localhost:5173"
   ],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+   allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With',
+    'session-id',
+    'Accept',
+    'Origin',
+    'Cache-Control',
+  ],
+  exposedHeaders: ['session-id'],
+  optionsSuccessStatus: 200,
 }));
+
+// Explicit preflight handling
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, session-id, Accept, Origin, Cache-Control');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Database connection
