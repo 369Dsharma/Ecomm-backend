@@ -33,15 +33,6 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-// Explicit preflight handling
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, session-id, Accept, Origin, Cache-Control');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200);
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Database connection
